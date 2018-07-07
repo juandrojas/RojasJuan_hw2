@@ -80,6 +80,7 @@ fig.savefig('cortes_transversales.pdf')
 plt.gcf().clear()
 plt.close()
 
+# 'rm_hor_road' remueve las calles horizontales de un mapa 'img', con transformada de fourier 'fft2_mag', respetando el cuadro 'w' * 'h' en la gráfica de la transfromada de Fourier
 def rm_hor_road(img, fft2_mag, w, h):
     m = np.shape(fft2_mag)[1]
     n = np.shape(fft2_mag)[0]
@@ -90,6 +91,8 @@ def rm_hor_road(img, fft2_mag, w, h):
                 output[i,j] = fft2_mag[i,j]
     return np.fft.ifft2(output)
 
+#graficamos 'rm_hor_road' para Barcelona.jpg
 plt.figure(figsize=(12,8))
 plt.imshow(abs(rm_hor_road(barc, barc_fft2, 20, 20)), cmap=plt.cm.gray)
 plt.savefig('sin_horizontales.pdf')
+plt.close()
