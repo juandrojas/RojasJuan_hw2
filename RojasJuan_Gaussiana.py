@@ -43,12 +43,11 @@ def row_echelon_form(M, b):
 def gauss_el(M,b):
     x = np.empty([N, 1])
     M,b = row_echelon_form(M,b)
-    print(M,b)
     x[-1] = b[-1]
     for n in range(2,N+1):
         x[-n] = -np.dot(M[-n][-n+1:], x[-n+1:]) + b[-n]
     return x
 
 #testing
-print(gauss_el(A,B))
+print("El vector solución del sistema es:",gauss_el(A,B))
 print(np.linalg.solve(A,B))
