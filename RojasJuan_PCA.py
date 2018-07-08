@@ -62,7 +62,7 @@ data_size = np.size(azores)
 
 #'norm' normaliza 'data'
 def norm(data):
-    return (data-np.mean(data))
+    return (data-np.mean(data))/np.std(data)
 
 #datos normalizados
 n_data = np.array([norm(azores), norm(darwin), norm(gibraltar), norm(iceland), norm(madras), norm(nagasaki), norm(tahiti)])
@@ -72,12 +72,12 @@ def cov_mat(norm_data):
     cov = np.empty([N,N])
     for i in range(N):
         for j in range(N):
-            cov[i,j] = sum(norm_data[i]*norm_data[j])/data_size
+            cov[i,j] = sum(norm_data[i]*norm_data[j])/(data_size-1)
     return cov
 
 cov = cov_mat(n_data)
 eigen = np.linalg.eig(cov)
-print(eigen[0]/sum(eigen[0]))
+print(cov)
 
 #'accpet_rate' qué tanto porcentaje de información de los datos se desea preservar haciendo PCA.
 accept_rate = .75
@@ -98,6 +98,7 @@ def choose_rel_data(cov, accept_rate):
     return eigen_val[:rel_index + 1], eigen_vec[:, :rel_index+1]
 
 e_val_pca, e_vec_pca = choose_rel_data(cov, accept_rate)
+print(eigen[1])
 
 #mensaje
 print("Se escogen las",np.size(e_val_pca),"primeras componentes principales de los datos, pues estas representan más del", str(accept_rate*100)+"%","(específicamente el",str(round(sum(e_val_pca)/sum(np.linalg.eig(cov)[0])*100,2)) + "%)", "de información de los datos.")
@@ -107,5 +108,28 @@ compressed_data = np.dot(np.transpose(e_vec_pca), n_data)
 plt.figure()
 plt.scatter(compressed_data[0],compressed_data[1], s=10)
 plt.savefig('PCA.pdf')
+plt.close()
 
 #PCA Analysis
+#primer componente principal
+fig, ((ax11, ax12), (ax21, ax22)) = plt.subplots(2,2, figsize=(20,12))
+loc = [0,'Azores', 'Darwin', "Gibraltar", "Islandia", 'Madras', 'Nagasaki', 'Tahiti']
+ax11.set_title('Coordenadas del primer componente principal')
+ax11.stem(e_vec_pca[:,0])
+ax11.set_xticklabels(loc, rotation = 45)
+plt.subplots_adjust(bottom=0.1, hspace=0.4)
+#primer componente scores
+ax12.set_title('Valores del primer componente principal')
+ax12.scatter(dates, compressed_data[0])
+ax12.set_xlim(dt.date(1895,1,1), dt.date(2005,1,1))
+ax12.axhline(0, color='black')
+#segundo componente principal
+ax21.set_title('Coordenadas del segundo componente principal')
+ax21.stem(e_vec_pca[:,1])
+ax21.set_xticklabels(loc, rotation = 45)
+#segundo componente scores
+ax22.set_title('Valores del segundo componente principal')
+ax22.scatter(dates, compressed_data[1])
+ax22.set_xlim(dt.date(1895,1,1), dt.date(2005,1,1))
+ax22.axhline(0, color='black')
+fig.savefig('graficasAdicionales.pdf')

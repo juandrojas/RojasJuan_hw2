@@ -13,7 +13,7 @@ def import_image_grayscale(path):
 paris = import_image_grayscale('Paris.jpg')
 barc = import_image_grayscale('Barcelona.jpg')
 triangulos = import_image_grayscale('triangulos.png')
-frac = import_image_grayscale('frac.jpg')
+frac = import_image_grayscale('frac.jpeg')
 digits = import_image_grayscale('digits.jpg')
 
 #'fourier_2D' retorna la transformada de Fourier de la imagen 'img' y un shifted array de las magniitudes del anterior
