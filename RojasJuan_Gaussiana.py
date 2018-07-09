@@ -50,4 +50,4 @@ def gauss_el(M,b):
 
 #testing
 print("El vector solución del sistema es:",gauss_el(A,B))
-print(np.linalg.solve(A,B))
+#print(np.linalg.solve(A,B)) #test usando np.linalg
