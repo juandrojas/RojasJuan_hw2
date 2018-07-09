@@ -45,7 +45,7 @@ plt.close()
 
 #graficamos sus transformadas de Fourier
 fig, ((ax11, ax12), (ax21, ax22)) = plt.subplots(2,2, figsize=(15,15))
-fig.suptitle('Transformadas de Fourier', fontsize=18)
+fig.suptitle('Transformadas de Fourier', fontsize=24)
 ax11.imshow(np.log(paris_fft2_amplitude), cmap='gray')
 ax12.imshow(np.log(barc_fft2_amplitude), cmap='gray')
 ax21.imshow(np.log(triangulos_fft2_amplitude), cmap='gray')

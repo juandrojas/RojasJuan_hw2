@@ -35,24 +35,32 @@ def create_date_arr(ini_year, fn_year):
 dates = create_date_arr(ini_year,fn_year)
 
 #plotting original data
-fig, (ax1, ax2, ax3, ax4, ax5, ax6, ax7) = plt.subplots(7, 1, figsize=(15,35))
-ax1.plot(dates, azores)
-ax1.set_title('Azores', fontsize=14)
-ax2.plot(dates, darwin)
-ax2.set_title('Darwin', fontsize=14)
-ax3.plot(dates, gibraltar)
-ax3.set_title('Gibraltar', fontsize=14)
-ax4.plot(dates, iceland)
-ax4.set_title('Islandia', fontsize=14)
-ax5.plot(dates, madras)
-ax5.set_title('Madras', fontsize=14)
-ax6.plot(dates, nagasaki)
-ax6.set_title('Nagasaki', fontsize=14)
-ax7.plot(dates, tahiti)
-ax7.set_title('Tahiti', fontsize=14)
-fig.suptitle('Presiones Atmosféricas', fontsize=18)
-fig.subplots_adjust(top=0.95, bottom=0.05)
-fig.savefig('Pressure.pdf')
+#fig, ((ax1, ax2), (ax3, ax4), (ax5, ax6), ax7) = plt.subplots(4, 2, figsize=(15,35))
+plt.figure(figsize=(20,12))
+plt.suptitle('Presiones Atmosféricas', fontsize=24)
+plt.subplot(421)
+plt.plot(dates, azores)
+plt.title('Azores', fontsize=20)
+plt.subplot(422)
+plt.plot(dates, darwin)
+plt.title('Darwin', fontsize=20)
+plt.subplot(423)
+plt.plot(dates, gibraltar)
+plt.title('Gibraltar', fontsize=20)
+plt.subplot(424)
+plt.plot(dates, iceland)
+plt.title('Islandia', fontsize=20)
+plt.subplot(425)
+plt.plot(dates, madras)
+plt.title('Madras', fontsize=20)
+plt.subplot(426)
+plt.plot(dates, nagasaki)
+plt.title('Nagasaki', fontsize=20)
+plt.subplot(427)
+plt.plot(dates, tahiti)
+plt.title('Tahiti', fontsize=20)
+plt.subplots_adjust(hspace=0.6)
+plt.savefig('Pressure.pdf')
 plt.gcf().clear()
 plt.close()
 
@@ -77,7 +85,6 @@ def cov_mat(norm_data):
 
 cov = cov_mat(n_data)
 eigen = np.linalg.eig(cov)
-print(cov)
 
 #'accpet_rate' qué tanto porcentaje de información de los datos se desea preservar haciendo PCA.
 accept_rate = .75
@@ -98,7 +105,6 @@ def choose_rel_data(cov, accept_rate):
     return eigen_val[:rel_index + 1], eigen_vec[:, :rel_index+1]
 
 e_val_pca, e_vec_pca = choose_rel_data(cov, accept_rate)
-print(eigen[1])
 
 #mensaje
 print("Se escogen las",np.size(e_val_pca),"primeras componentes principales de los datos, pues estas representan más del", str(accept_rate*100)+"%","(específicamente el",str(round(sum(e_val_pca)/sum(np.linalg.eig(cov)[0])*100,2)) + "%)", "de información de los datos.")
@@ -107,6 +113,8 @@ print("Se escogen las",np.size(e_val_pca),"primeras componentes principales de l
 compressed_data = np.dot(np.transpose(e_vec_pca), n_data)
 plt.figure()
 plt.scatter(compressed_data[0],compressed_data[1], s=10)
+plt.xlabel('PC1')
+plt.ylabel('PC2')
 plt.savefig('PCA.pdf')
 plt.close()
 
@@ -114,21 +122,21 @@ plt.close()
 #primer componente principal
 fig, ((ax11, ax12), (ax21, ax22)) = plt.subplots(2,2, figsize=(20,12))
 loc = [0,'Azores', 'Darwin', "Gibraltar", "Islandia", 'Madras', 'Nagasaki', 'Tahiti']
-ax11.set_title('Coordenadas del primer componente principal')
+ax11.set_title('Coordenadas del primer componente principal', fontsize=20)
 ax11.stem(e_vec_pca[:,0])
 ax11.set_xticklabels(loc, rotation = 45)
 plt.subplots_adjust(bottom=0.1, hspace=0.4)
 #primer componente scores
-ax12.set_title('Valores del primer componente principal')
+ax12.set_title('Valores del primer componente principal', fontsize=20)
 ax12.scatter(dates, compressed_data[0])
 ax12.set_xlim(dt.date(1895,1,1), dt.date(2005,1,1))
 ax12.axhline(0, color='black')
 #segundo componente principal
-ax21.set_title('Coordenadas del segundo componente principal')
+ax21.set_title('Coordenadas del segundo componente principal', fontsize=20)
 ax21.stem(e_vec_pca[:,1])
 ax21.set_xticklabels(loc, rotation = 45)
 #segundo componente scores
-ax22.set_title('Valores del segundo componente principal')
+ax22.set_title('Valores del segundo componente principal', fontsize=20)
 ax22.scatter(dates, compressed_data[1])
 ax22.set_xlim(dt.date(1895,1,1), dt.date(2005,1,1))
 ax22.axhline(0, color='black')

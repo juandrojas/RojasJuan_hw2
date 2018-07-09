@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage{float}
+
+\title{Análisis PCA}
+\author{Juan Diego Rojas}
+\begin{document}
+	\maketitle
+	Dados los datos de presiones atmosféricas en distintas partes del mundo (Azores, Darwin, Gibraltar, Islandia, Madras, Nagasaki y Tahiti) empleamos el método de PCA para entender más a fondo los datos. Un gráfico de los datos originales es el siguiente:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1.0\linewidth]{Pressure.pdf}
+		\caption{Gráfica de los datos originales}
+		\label{fig:pressure}
+	\end{figure}
+	A simple vista, la Figura (\ref{fig:pressure}) demuestra que muy es complicado detectar cualquier tipo de patrón en los datos, pues las constantes oscilaciones dificultan la tarea. Para visualizar los datos en menores dimensiones utilizamos PCA. Calculamos los componentes principales de los datos. Se obtienen los siguientes resultados:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1.0\linewidth]{graficasAdicionales.pdf}
+		\caption{Componentes principales}
+		\label{fig:additional}
+	\end{figure}
+	De la Figura (\ref{fig:additional}) podemos concluir que PC1 tiene una media-alta correlación con Darwin, Islandia y Tahiti y una media-alta anti-correlación con Gibraltar, Madras y Nagasaki.  Entonces, un alto PC1 para un momento temporal específico indica una posible media-alta presión atmosférica en Darwin, Islandia y Tahiti y una baja-media presión atmosférica en Gibraltar, Madras y Nagasaki y es inconclusa respecto a Azores. Se puede concluir que el comportamiento en el primer grupo (Darwin, Islandia y Tahiti) es inverso al del segundo (Gibraltar, Madras y Nagasak). En  adición, PC2 tiene una alta correlación con Azores, una media-alta correlación con Gibraltar y una alta anti-correlación con Islandia, por lo tanto el comportamiento de la presión atmosférica en Azores es inverso al de Islandia. Por otro lado, la varianza de PC1 es mayor a la de PC2, entonces el contraste entre el primer y segundo grupo de PC1 es mayor al contraste entre Azores e Islandia. El gráfico de PC1 vs PC2 es el siguiente:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{PCA.pdf}
+		\caption{PC1 vs PC2}
+		\label{fig:PCA}
+	\end{figure}
+	La figura (\ref{fig:PCA}) revela una alta concentración de puntos con PC2 nulo y PC1 alto; es decir, una alta concentración de observaciones en el tiempo en las que el primer grupo sube su presión atmosférica a la promedio, el segundo grupo tiene presión menor a la promedio y Azores tiene una presión atmosférica promedio.
+\end{document}
+
