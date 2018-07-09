@@ -42,7 +42,6 @@ def recov_freq(n, dt):
 #recuperamos las frecuencias y transformada de Fourier de nuestros datos
 freq = recov_freq(n,dt)
 fft = disc_four_trans(data_y)
-print(np.shape(fft), np.shape(freq))
 fft_mag = np.absolute(disc_four_trans(data_y))
 
 #calculamos solamente la parte positiva de las frecuencias para obtener las 3 frecuencias principales
