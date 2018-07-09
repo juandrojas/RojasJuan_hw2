@@ -12,6 +12,12 @@ with open('Signal.csv') as csvfile:
         data_t = np.append(data_t, float(row[0]))
         data_y = np.append(data_y, float(row[1]))
 
+#graficamos la señal
+plt.plot(data_t, data_y)
+plt.title('Señal Original')
+plt.savefig('Signal.pdf')
+plt.close()
+
 #calculamos tamaño de los datos 'n' y espaciamiento temporal 'dt'
 n = np.size(data_t)
 dt = data_t[1] - data_t[0]
@@ -35,19 +41,21 @@ def recov_freq(n, dt):
 
 #recuperamos las frecuencias y transformada de Fourier de nuestros datos
 freq = recov_freq(n,dt)
-fft = np.absolute(disc_four_trans(data_y))
+fft = disc_four_trans(data_y)
+print(np.shape(fft), np.shape(freq))
+fft_mag = np.absolute(disc_four_trans(data_y))
 
 #calculamos solamente la parte positiva de las frecuencias para obtener las 3 frecuencias principales
 pos_freq = freq[freq >= 0]
-pos_fft = fft[freq >= 0]
-index = pos_fft.argsort()[-3:]
+pos_fft_mag = fft_mag[freq >= 0]
+index = pos_fft_mag.argsort()[-3:]
 
 #mensaje a consola
 print("las tres frecuencias principales de la señal son:",str(round(pos_freq[index][-1])) + ',', round(pos_freq[index][-2]), "y",str(round(pos_freq[index][-3])) + '.')
 
 #plotting de la transformada de Fourier se guarda en 'TF_Signal.pdf'
 plt.figure()
-plt.plot(freq, fft/n)
+plt.bar(freq, fft_mag/n, width = 30.)
 plt.savefig('TF_Signal.pdf')
 plt.gcf().clear()
 plt.close()
@@ -55,17 +63,25 @@ plt.close()
 #'f_c' frecuencia de corte filtro_pasabajos
 f_c = 1000.0
 
-#esta función realiza un filtro pasabajos dado por la frecuencia de corte. Recibe 'freq' un array de frecuencias y 'fft' un array de transformada de Fourier de las frecuencias 'freq'
+#esta función realiza un filtro pasabajos dado por la frecuencia de corte. Recibe 'freq' un array de frecuencias y 'fft' un array de la transformada de Fourier de las frecuencias 'freq'
 def filtro_pasabajos(freq, fft):
-    return freq[np.abs(freq) <= f_c], fft[np.abs(freq) <= f_c]
+    return fft*np.array([np.abs(freq) <= f_c]).astype(int).flatten()
+
+#tranformada inversa de Fourier
+def inv_disc_fourier_transform(y):
+    fourier = np.array([])
+    for m in range(n):
+        aux_sum = 0
+        for k in range(n):
+            aux_sum = aux_sum + y[k]*np.exp(2j*k*np.pi*m/n)
+        fourier = np.append(fourier, (1/n)*aux_sum)
+    return fourier
 
 #plotting 'Sin Filtrar' y plotting con 'Filtro pasabajos'. Se guarda en 'SignalFiltro.pdf'
 fig, (ax0, ax1) = plt.subplots(nrows=2, sharex=False)
 plt.subplots_adjust(hspace=0.6)
-ax0.bar(freq, fft/n, width = 80.)
+ax0.plot(data_t, data_y)
 ax0.set_title('Sin Filtrar')
-ax1.bar(filtro_pasabajos(freq,fft)[0], filtro_pasabajos(freq,fft)[1]/n, width=30.)
+ax1.plot(data_t, inv_disc_fourier_transform(filtro_pasabajos(freq, fft)))
 ax1.set_title('Filtro pasabajos')
-ax0.set_xlabel('Frecuencias (Hz)')
-ax1.set_xlabel('Frecuencias (Hz)')
 plt.savefig('SignalFiltro.pdf')
